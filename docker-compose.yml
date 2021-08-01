@@ -1,5 +1,11 @@
 version: "3.3"
 
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+
 services:
   traefik:
     image: traefik:2.4.13
@@ -61,25 +67,25 @@ services:
       - "traefik.http.routers.api.tls.domains[0].sans=*.dkapparel.store"
       - "traefik.http.services.api.loadbalancer.server.port=8000"
 
-  storefront:
-    image: registry.gitlab.com/dkapparel/saleor-platform/storefront
-    restart: unless-stopped
-    networks:
-      - web
-      - internal
-    volumes:
-      - ./saleor-storefront/:/app:cached
-      - /app/node_modules/
-    command: npm start -- --hostname 0.0.0.0
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.storefront.rule=Host:dkapparel.store"
-      - "traefik.http.routers.storefront.entrypoints=websecure"
-      - "traefik.http.routers.storefront.tls=true"
-      - "traefik.http.routers.storefront.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.storefront.tls.domains[0].main=dkapparel.store"
-      - "traefik.http.routers.storefront.tls.domains[0].sans=*.dkapparel.store"
-      - "traefik.http.services.api.storefront.server.port=8100"
+  # storefront:
+  #   image: registry.gitlab.com/dkapparel/saleor-platform/storefront
+  #   restart: unless-stopped
+  #   networks:
+  #     - web
+  #     - internal
+  #   volumes:
+  #     - ./saleor-storefront/:/app:cached
+  #     - /app/node_modules/
+  #   command: npm start -- --hostname 0.0.0.0
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.storefront.rule=Host:dkapparel.store"
+  #     - "traefik.http.routers.storefront.entrypoints=websecure"
+  #     - "traefik.http.routers.storefront.tls=true"
+  #     - "traefik.http.routers.storefront.tls.certresolver=letsencrypt"
+  #     - "traefik.http.routers.storefront.tls.domains[0].main=dkapparel.store"
+  #     - "traefik.http.routers.storefront.tls.domains[0].sans=*.dkapparel.store"
+  #     - "traefik.http.services.api.storefront.server.port=8100"
 
   backoffice:
     image: registry.gitlab.com/dkapparel/saleor-platform/backoffice
@@ -169,9 +175,3 @@ volumes:
   saleor-redis:
     driver: local
   saleor-media:
-
-networks:
-  web:
-    external: true
-  internal:
-    external: false
