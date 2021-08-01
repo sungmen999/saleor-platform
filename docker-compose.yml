@@ -28,7 +28,7 @@ services:
       - "traefik.http.services.proxy.loadbalancer.server.port=8000"
 
   api:
-    image: registry.gitlab.com/dkapparel/saleor-platform/api
+    image: registry.gitlab.com/dkapparel/saleor-platform/api:1.0.0
     restart: unless-stopped
     networks:
       - saleor-backend-tier
