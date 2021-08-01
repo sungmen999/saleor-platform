@@ -1,9 +1,12 @@
 [submodule "saleor"]
 	path = saleor
 	url = https://github.com/sungmen999/saleor.git
+	branch = 2.11.10
 [submodule "saleor-storefront"]
 	path = saleor-storefront
 	url = https://github.com/sungmen999/saleor-storefront.git
+	branch = 2.11
 [submodule "saleor-dashboard"]
 	path = saleor-dashboard
 	url = https://github.com/sungmen999/saleor-dashboard.git
+	branch = 2.11.1
