@@ -1,11 +1,5 @@
 version: "3.3"
 
-networks:
-  web:
-    external: true
-  internal:
-    external: false
-
 services:
   traefik:
     image: traefik:2.4.13
@@ -23,9 +17,6 @@ services:
     volumes:
       - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - web
-      - internal
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy.rule=Host:proxy.dkapparel.store"
@@ -40,8 +31,7 @@ services:
     image: registry.gitlab.com/dkapparel/saleor-platform/api
     restart: unless-stopped
     networks:
-      - web
-      - internal
+      - saleor-backend-tier
     depends_on:
       - db
       - redis
@@ -67,32 +57,26 @@ services:
       - "traefik.http.routers.api.tls.domains[0].sans=*.dkapparel.store"
       - "traefik.http.services.api.loadbalancer.server.port=8000"
 
-  # storefront:
-  #   image: registry.gitlab.com/dkapparel/saleor-platform/storefront
-  #   restart: unless-stopped
-  #   networks:
-  #     - web
-  #     - internal
-  #   volumes:
-  #     - ./saleor-storefront/:/app:cached
-  #     - /app/node_modules/
-  #   command: npm start -- --hostname 0.0.0.0
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.storefront.rule=Host:dkapparel.store"
-  #     - "traefik.http.routers.storefront.entrypoints=websecure"
-  #     - "traefik.http.routers.storefront.tls=true"
-  #     - "traefik.http.routers.storefront.tls.certresolver=letsencrypt"
-  #     - "traefik.http.routers.storefront.tls.domains[0].main=dkapparel.store"
-  #     - "traefik.http.routers.storefront.tls.domains[0].sans=*.dkapparel.store"
-  #     - "traefik.http.services.api.storefront.server.port=8100"
+  storefront:
+    image: registry.gitlab.com/dkapparel/saleor-platform/storefront
+    restart: unless-stopped
+    volumes:
+      - ./saleor-storefront/:/app:cached
+      - /app/node_modules/
+    command: npm start -- --hostname 0.0.0.0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.storefront.rule=Host:dkapparel.store"
+      - "traefik.http.routers.storefront.entrypoints=websecure"
+      - "traefik.http.routers.storefront.tls=true"
+      - "traefik.http.routers.storefront.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.storefront.tls.domains[0].main=dkapparel.store"
+      - "traefik.http.routers.storefront.tls.domains[0].sans=*.dkapparel.store"
+      - "traefik.http.services.api.storefront.server.port=8100"
 
   backoffice:
     image: registry.gitlab.com/dkapparel/saleor-platform/backoffice
     restart: unless-stopped
-    networks:
-      - web
-      - internal
     volumes:
       - ./saleor-dashboard/:/app:cached
       - /app/node_modules/
@@ -112,7 +96,7 @@ services:
       - 5432:5432
     restart: unless-stopped
     networks:
-      - internal
+      - saleor-backend-tier
     volumes:
       - saleor-db:/var/lib/postgresql/data
     environment:
@@ -125,7 +109,7 @@ services:
       - 6379:6379
     restart: unless-stopped
     networks:
-      - internal
+      - saleor-backend-tier
     volumes:
       - saleor-redis:/data
 
@@ -134,7 +118,7 @@ services:
     command: celery -A saleor --app=saleor.celeryconf:app worker --loglevel=info
     restart: unless-stopped
     networks:
-      - internal
+      - saleor-backend-tier
     env_file: common.env
     depends_on:
       - redis
@@ -157,7 +141,7 @@ services:
       - "9411:9411"
     restart: unless-stopped
     networks:
-      - internal
+      - saleor-backend-tier
 
   mailhog:
     image: mailhog/mailhog
@@ -166,8 +150,7 @@ services:
       - 8025:8025 # web ui. Visit http://localhost:8025/ to check emails
     restart: unless-stopped
     networks:
-      - web
-      - internal
+      - saleor-backend-tier
 
 volumes:
   saleor-db:
@@ -175,3 +158,7 @@ volumes:
   saleor-redis:
     driver: local
   saleor-media:
+
+networks:
+  saleor-backend-tier:
+    driver: bridge
