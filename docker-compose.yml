@@ -40,7 +40,7 @@ services:
       - ./saleor/saleor/:/app/saleor:Z
       - ./saleor/templates/:/app/templates:Z
       - ./saleor/tests/:/app/tests
-      - ./.credentials/dkapparel-10e74e83acf9.json:/app/.credentials/dkapparel-10e74e83acf9.json
+      - ./.credentials/dkapparel-10e74e83acf9.json:/app/credentials/dkapparel-10e74e83acf9.json
       # shared volume between worker and api for media
       - saleor-media:/app/media
     command: python manage.py runserver 0.0.0.0:8000
