@@ -22,7 +22,7 @@ services:
       - internal
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.proxy.rule=Host:proxy.dkapparel.store"
+      - "traefik.http.routers.proxy.rule=Host(`traefik.dkapparel.store`)"
       - "traefik.http.routers.proxy.entrypoints=websecure"
       - "traefik.http.routers.proxy.tls=true"
       - "traefik.http.routers.proxy.tls.certresolver=letsencrypt"
@@ -57,7 +57,7 @@ services:
       - DASHBOARD_URL=https://backoffice.dkapparel.store/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host:api.dkapparel.store"
+      - "traefik.http.routers.api.rule=Host(`api.dkapparel.store`)"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls=true"
       - "traefik.http.routers.api.tls.certresolver=letsencrypt"
@@ -79,7 +79,7 @@ services:
     command: npm start -- --hostname 0.0.0.0
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.storefront.rule=Host:dkapparel.store"
+      - "traefik.http.routers.storefront.rule=Host(`storefront.dkapparel.store`)"
       - "traefik.http.routers.storefront.entrypoints=websecure"
       - "traefik.http.routers.storefront.tls=true"
       - "traefik.http.routers.storefront.tls.certresolver=letsencrypt"
@@ -104,7 +104,7 @@ services:
       - /app/node_modules/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backoffice.rule=Host:backoffice.dkapparel.store"
+      - "traefik.http.routers.backoffice.rule=Host(`backoffice.dkapparel.store`)"
       - "traefik.http.routers.backoffice.entrypoints=websecure"
       - "traefik.http.routers.backoffice.tls=true"
       - "traefik.http.routers.backoffice.tls.certresolver=letsencrypt"
