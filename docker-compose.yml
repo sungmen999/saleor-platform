@@ -58,22 +58,22 @@ services:
       - "traefik.http.routers.api.tls.domains[0].sans=*.dkapparel.store"
       - "traefik.http.services.api.loadbalancer.server.port=8000"
 
-  storefront:
-    image: registry.gitlab.com/dkapparel/saleor-platform/storefront
-    restart: unless-stopped
-    volumes:
-      - ./saleor-storefront/:/app:cached
-      - /app/node_modules/
-    command: npm start -- --hostname 0.0.0.0
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.storefront.rule=Host:dkapparel.store"
-      - "traefik.http.routers.storefront.entrypoints=websecure"
-      - "traefik.http.routers.storefront.tls=true"
-      - "traefik.http.routers.storefront.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.storefront.tls.domains[0].main=dkapparel.store"
-      - "traefik.http.routers.storefront.tls.domains[0].sans=*.dkapparel.store"
-      - "traefik.http.services.api.storefront.server.port=8100"
+  # storefront:
+  #   image: registry.gitlab.com/dkapparel/saleor-platform/storefront
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./saleor-storefront/:/app:cached
+  #     - /app/node_modules/
+  #   command: npm start -- --hostname 0.0.0.0
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.storefront.rule=Host:dkapparel.store"
+  #     - "traefik.http.routers.storefront.entrypoints=websecure"
+  #     - "traefik.http.routers.storefront.tls=true"
+  #     - "traefik.http.routers.storefront.tls.certresolver=letsencrypt"
+  #     - "traefik.http.routers.storefront.tls.domains[0].main=dkapparel.store"
+  #     - "traefik.http.routers.storefront.tls.domains[0].sans=*.dkapparel.store"
+  #     - "traefik.http.services.api.storefront.server.port=8100"
 
   backoffice:
     image: registry.gitlab.com/dkapparel/saleor-platform/backoffice
