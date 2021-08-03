@@ -52,7 +52,7 @@ services:
       - "traefik.http.routers.proxy.entrypoints=websecure"
       - "traefik.http.routers.proxy.middlewares=secured"
       - "traefik.http.middlewares.secured.chain.middlewares=https-only,known-ips,auth-users"
-      - "traefik.http.middlewares.auth-users.basicauth.users=test:$apr1$gkhQMADi$rQ3MBaI0Zbj6p.y62OsIJ."
+      - "traefik.http.middlewares.auth-users.basicauth.users=test:`$apr1$gkhQMADi$rQ3MBaI0Zbj6p.y62OsIJ.`"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=184.22.82.229/32"
 
