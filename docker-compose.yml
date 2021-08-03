@@ -6,15 +6,17 @@ services:
     command:
       - "--log.level=INFO"
       - "--log.filePath=etc/traefik/log/traefik.log"
+      - "--accessLog=true"
       - "--accessLog.filePath=etc/traefik/log/access.log"
       - "--accessLog.bufferingSize=100"
+      - "--accessLog.fields.names.StartUTC=drop"
 
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=saleor-backend-tier"
       - "--providers.docker.defaultRule=Host(`{{ normalize .Name }}.dkapparel.store`)"
 
-      - "--api"
+      - "--api.dashboard=true"
       - "--api.insecure=true"
       
       - "--entrypoints.web.address=:80"
@@ -41,15 +43,20 @@ services:
     environment:
       - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
       - CF_ZONE_API_TOKEN=${CF_ZONE_API_TOKEN}
+      - TZ=Asia/Bangkok
     labels:
       - "traefik.enable=true"
+      - "traefik.http.middlewares.default-compress.compress=true"
+      - "traefik.http.middlewares.default-http.redirectScheme.scheme=https"
+      - "traefik.http.middlewares.default-http.redirectScheme.permanent=true"
+      - "traefik.http.middlewares.default-https.chain.middlewares=default-compress"
       - "traefik.http.routers.proxy.rule=Host(`traefik.dkapparel.store`)"
       - "traefik.http.routers.proxy.entrypoints=websecure"
       - "traefik.http.routers.proxy.tls=true"
       - "traefik.http.routers.proxy.tls.certresolver=letsencrypt"
       - "traefik.http.routers.proxy.tls.domains[0].main=dkapparel.store"
       - "traefik.http.routers.proxy.tls.domains[0].sans=*.dkapparel.store"
-      - "traefik.http.services.proxy.loadbalancer.server.port=8000"
+      - "traefik.http.services.proxy.loadbalancer.server.port=80"
 
   api:
     image: registry.gitlab.com/dkapparel/saleor-platform/api:1.0.1
