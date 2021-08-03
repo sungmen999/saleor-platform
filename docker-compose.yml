@@ -51,10 +51,11 @@ services:
       - "traefik.http.routers.proxy.service=api@internal"
       - "traefik.http.routers.proxy.entrypoints=websecure"
       - "traefik.http.routers.proxy.middlewares=secured"
-      - "traefik.http.middlewares.secured.chain.middlewares=https-only,known-ips,auth-users"
+      - "traefik.http.middlewares.secured.chain.middlewares=https-only,auth-users"
+      # - "traefik.http.middlewares.secured.chain.middlewares=https-only,known-ips,auth-users"
       - "traefik.http.middlewares.auth-users.basicauth.users=${AUTH_USERNAME}:${AUTH_PASSWORD}"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=184.22.82.229/32"
+      # - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=184.22.82.229/32"
 
   api:
     image: registry.gitlab.com/dkapparel/saleor-platform/api:1.0.1
