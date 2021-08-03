@@ -4,28 +4,43 @@ services:
   traefik:
     image: traefik:2.4.13
     command:
+      - "--log.level=INFO"
+      - "--log.filePath=etc/traefik/log/traefik.log"
+      - "--accessLog.filePath=etc/traefik/log/access.log"
+      - "--accessLog.bufferingSize=100"
+
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=saleor-backend-tier"
+      - "--providers.docker.defaultRule=Host(`{{ normalize .Name }}.dkapparel.store`)"
+
+      - "--api"
+      - "--api.insecure=true"
       
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
 
       - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
 
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.letsencrypt.acme.email=dkapparel2020@gmail.com"
+      - "--certificatesresolvers.letsencrypt.acme.email=${CF_API_EMAIL}"
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
     ports:
       - 443:443
       - 80:8080
     volumes:
       - ./letsencrypt:/letsencrypt
+      - ./log/:/etc/traefik/log/
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - saleor-backend-tier
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+      - CF_ZONE_API_TOKEN=${CF_ZONE_API_TOKEN}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy.rule=Host(`traefik.dkapparel.store`)"
