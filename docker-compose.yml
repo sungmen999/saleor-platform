@@ -112,6 +112,8 @@ services:
     volumes:
       - ./saleor-dashboard/:/app:cached
       - /app/node_modules/
+    networks:
+      - saleor-backend-tier
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backoffice.rule=Host(`backoffice.dkapparel.store`)"
