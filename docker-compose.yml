@@ -34,7 +34,7 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
     ports:
       - 443:443
-      - 80:80
+      - 80:8080
     volumes:
       - ./letsencrypt:/letsencrypt
       - ./log/:/etc/traefik/log/
@@ -54,7 +54,7 @@ services:
       - "traefik.http.middlewares.auth-users.basicauth.users=${AUTH_USERNAME}:${AUTH_PASSWORD}"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
-      - "traefik.http.services.proxy-service.loadbalancer.server.port=80"
+      - "traefik.http.services.proxy-service.loadbalancer.server.port=8080"
 
   api:
     image: registry.gitlab.com/dkapparel/saleor-platform/api:1.0.1
