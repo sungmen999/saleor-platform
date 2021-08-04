@@ -54,7 +54,6 @@ services:
       - "traefik.http.middlewares.auth-users.basicauth.users=${AUTH_USERNAME}:${AUTH_PASSWORD}"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
-      - "traefik.http.routers.api.service=api-service"
       - "traefik.http.services.proxy-service.loadbalancer.server.port=8080"
 
   api:
@@ -86,7 +85,6 @@ services:
       - "traefik.http.middlewares.secured.chain.middlewares=https-only,known-ips"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
-      - "traefik.http.routers.api.service=api-service"
       - "traefik.http.services.api-service.loadbalancer.server.port=8000"
 
   # storefront:
@@ -121,7 +119,6 @@ services:
       - "traefik.http.middlewares.secured.chain.middlewares=https-only,known-ips"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
-      - "traefik.http.routers.api.service=backoffice-service"
       - "traefik.http.services.backoffice-service.loadbalancer.server.port=8200"
 
   db:
