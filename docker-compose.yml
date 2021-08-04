@@ -80,11 +80,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`api.dkapparel.store`)"
+      - "traefik.http.routers.api.service=api@internal"
       - "traefik.http.routers.api.entrypoints=websecure"
-      - "traefik.http.routers.api.tls=true"
-      - "traefik.http.routers.api.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.api.tls.domains[0].main=dkapparel.store"
-      - "traefik.http.routers.api.tls.domains[0].sans=*.dkapparel.store"
+      - "traefik.http.routers.api.middlewares=secured"
       - "traefik.http.services.api.loadbalancer.server.port=8000"
 
   # storefront:
@@ -97,12 +95,10 @@ services:
   #   labels:
   #     - "traefik.enable=true"
   #     - "traefik.http.routers.storefront.rule=Host(`dkapparel.store`)"
+  #     - "traefik.http.routers.storefront.service=backoffice@internal"
   #     - "traefik.http.routers.storefront.entrypoints=websecure"
-  #     - "traefik.http.routers.storefront.tls=true"
-  #     - "traefik.http.routers.storefront.tls.certresolver=letsencrypt"
-  #     - "traefik.http.routers.storefront.tls.domains[0].main=dkapparel.store"
-  #     - "traefik.http.routers.storefront.tls.domains[0].sans=*.dkapparel.store"
-  #     - "traefik.http.services.api.storefront.server.port=8100"
+  #     - "traefik.http.routers.storefront.middlewares=secured"
+  #     - "traefik.http.services.storefront.loadbalancer.server.port=8100"
 
   backoffice:
     image: registry.gitlab.com/dkapparel/saleor-platform/backoffice
@@ -113,12 +109,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backoffice.rule=Host(`backoffice.dkapparel.store`)"
+      - "traefik.http.routers.backoffice.service=backoffice@internal"
       - "traefik.http.routers.backoffice.entrypoints=websecure"
-      - "traefik.http.routers.backoffice.tls=true"
-      - "traefik.http.routers.backoffice.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.backoffice.tls.domains[0].main=dkapparel.store"
-      - "traefik.http.routers.backoffice.tls.domains[0].sans=*.dkapparel.store"
-      - "traefik.http.services.backoffice.storefront.server.port=8200"
+      - "traefik.http.routers.backoffice.middlewares=secured"
+      - "traefik.http.services.backoffice.loadbalancer.server.port=8200"
 
   db:
     image: library/postgres:11.1-alpine
