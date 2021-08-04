@@ -47,7 +47,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy.rule=Host(`traefik.dkapparel.store`)"
-      - "traefik.http.routers.storefront.service=api@internal"
       - "traefik.http.routers.proxy.entrypoints=websecure"
       - "traefik.http.routers.proxy.middlewares=routers-secured"
       - "traefik.http.middlewares.routers-secured.chain.middlewares=https-only,known-ips,auth-users"
@@ -84,6 +83,7 @@ services:
       - "traefik.http.middlewares.api-secured.chain.middlewares=https-only,known-ips"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
+      - "traefik.http.services.api.loadbalancer.server.port=8000"
 
   # storefront:
   #   image: registry.gitlab.com/dkapparel/saleor-platform/storefront
@@ -117,6 +117,7 @@ services:
       - "traefik.http.middlewares.backoffice-secured.chain.middlewares=https-only,known-ips"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
+      - "traefik.http.services.backoffice.loadbalancer.server.port=8200"
 
   db:
     image: library/postgres:11.1-alpine
