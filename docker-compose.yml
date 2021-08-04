@@ -54,6 +54,7 @@ services:
       - "traefik.http.middlewares.auth-users.basicauth.users=${AUTH_USERNAME}:${AUTH_PASSWORD}"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
+      - "traefik.http.routers.proxy.service=proxy-service"
       - "traefik.http.services.proxy-service.loadbalancer.server.port=8080"
 
   api:
