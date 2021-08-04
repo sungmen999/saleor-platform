@@ -48,7 +48,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy.rule=Host(`traefik.dkapparel.store`)"
-      - "traefik.http.routers.proxy.service=api@internal"
       - "traefik.http.routers.proxy.entrypoints=websecure"
       - "traefik.http.routers.proxy.middlewares=secured"
       - "traefik.http.middlewares.secured.chain.middlewares=https-only,known-ips,auth-users"
@@ -80,7 +79,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`api.dkapparel.store`)"
-      - "traefik.http.routers.api.service=api@internal"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.middlewares=secured"
       - "traefik.http.services.api.loadbalancer.server.port=8000"
@@ -109,7 +107,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backoffice.rule=Host(`backoffice.dkapparel.store`)"
-      - "traefik.http.routers.backoffice.service=backoffice@internal"
       - "traefik.http.routers.backoffice.entrypoints=websecure"
       - "traefik.http.routers.backoffice.middlewares=secured"
       - "traefik.http.services.backoffice.loadbalancer.server.port=8200"
