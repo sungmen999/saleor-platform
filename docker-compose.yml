@@ -124,7 +124,7 @@ services:
       # - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       # - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
       - "traefik.http.routers.backoffice.service=backoffice-service"
-      - "traefik.http.services.backoffice-service.loadbalancer.server.port=80"
+      - "traefik.http.services.backoffice-service.loadbalancer.server.port=8200"
 
   db:
     image: library/postgres:11.1-alpine
