@@ -116,7 +116,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.backoffice.rule=Host(`backoffice.dkapparel.store`)"
       - "traefik.http.routers.backoffice.entrypoints=websecure"
-      - "traefik.http.routers.backoffice.middlewares=secured"
+      # - "traefik.http.routers.backoffice.middlewares=secured"
       # - "traefik.http.middlewares.secured.chain.middlewares=https-only,known-ips"
       # - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       # - "traefik.http.middlewares.known-ips.ipwhitelist.sourceRange=${CLOUDFLARE_IP_RANGES}"
