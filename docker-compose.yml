@@ -34,7 +34,7 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
     ports:
       - 443:443
-      - 80:8080
+      - 80:80
     volumes:
       - ./letsencrypt:/letsencrypt
       - ./log/:/etc/traefik/log/
@@ -48,6 +48,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.proxy.rule=Host(`traefik.dkapparel.store`)"
+      - "traefik.http.routers.proxy.service=api@internal"
       - "traefik.http.routers.proxy.entrypoints=websecure"
       - "traefik.http.routers.proxy.middlewares=secured"
       - "traefik.http.middlewares.secured.chain.middlewares=https-only,known-ips,auth-users"
