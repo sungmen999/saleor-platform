@@ -176,7 +176,8 @@ services:
       - ./saleor/templates/:/app/templates:Z,cached
       # shared volume between worker and api for media
       - saleor-media:/app/media
-
+      - ~/app/dkapparel-10e74e83acf9.json:/app/credentials/dkapparel.json
+      
   jaeger:
     image: jaegertracing/all-in-one
     ports:
